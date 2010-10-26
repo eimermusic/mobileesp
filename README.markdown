@@ -1,9 +1,10 @@
 This is a quick port of Mobile ESP to Ruby.
+-------------------------------------------
 
 All detection methods are renamed
 detectIphone -> is_iphone?
 
-All constants are underscored and upercase
+All constants are underscored and uppercase
 e.g. DEVICE_IPHONE
 
 Public attributes and getter methods are attribute readers
@@ -15,9 +16,20 @@ They may be removed and replaced by caching detection results
 
 I have kept sort of the same code-structure in the methods to make it easier to update.
 
-.
+Usage example in rails
+----------------------
 
-See the following sites for more details on the project:
+    ua = MobileESP::UserAgentInfo.new(request.user_agent, request.accept)
+    if ua.is_tier_iphone?
+      # You get hignend mobile layout
+    elsif ua.is_mobile_quick?
+      # You get lowend mobile layout
+    elsif ua.is_ipad?
+      # You probably still get the computer layout
+    end
+
+
+See the following sites for more details on the project
 http://www.mobileesp.com/
 http://code.google.com/p/mobileesp/
 
