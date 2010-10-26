@@ -29,6 +29,59 @@ Usage example in rails
     end
 
 
+Quick list of detection methods
+-------------------------------
+
+    # Reader methods to keep as much consistency as possible with the original api
+    # These are a bit quicker than the raw methods below
+    ua.is_iphone
+    ua.is_tier_iphone
+    ua.is_tier_rich_css
+    ua.is_tier_generic_mobile
+    
+    # All the rubyfied detection methods
+    # (the source is connented, you know?)
+    ua.is_iphone?
+    ua.is_ipod?
+    ua.is_ipad?
+    ua.is_iphone_or_ipod?
+    ua.is_android?
+    ua.is_android_webkit?
+    ua.is_webkit?
+    ua.is_s60_oss_browser?
+    ua.is_symbian_os?
+    ua.is_windows_phone7?
+    ua.is_windows_mobile?
+    ua.is_black_berry?
+    ua.is_black_berry_web_kit?
+    ua.is_black_berry_touch?
+    ua.is_black_berry_high?
+    ua.is_black_berry_low?
+    ua.is_palm_os?
+    ua.is_palm_web_os?
+    ua.is_garmin_nuvifone?
+    ua.is_smartphone?
+    ua.is_brew_device?
+    ua.is_danger_hiptop?
+    ua.is_opera_mobile?
+    ua.is_wap_wml?
+    ua.is_kindle?
+    ua.is_mobile_quick?
+    ua.is_sony_playstation?
+    ua.is_nintendo?
+    ua.is_xbox?
+    ua.is_game_console?
+    ua.is_midp_capable?
+    ua.is_maemo_tablet?
+    ua.is_archos?
+    ua.is_sony_mylo?
+    ua.is_mobile_long?
+    ua.is_tier_iphone?
+    ua.is_tier_rich_css?
+    ua.is_tier_other_phones?
+
+
+
 See the following sites for more details on the project
 http://www.mobileesp.com/
 http://code.google.com/p/mobileesp/
