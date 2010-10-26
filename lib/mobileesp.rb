@@ -214,7 +214,7 @@ module MobileESP
         !@user_agent.index(DEVICE_IE_MOB).nil? || 
         !@user_agent.index(ENGINE_PIE).nil? || 
         (!@user_agent.index(MANU_HTC).nil? && !@user_agent.index(DEVICE_WINDOWS).nil?) || 
-        (is_wap_wml && !@user_agent.index(DEVICE_WINDOWS).nil?) )
+        (is_wap_wml? && !@user_agent.index(DEVICE_WINDOWS).nil?) )
       
       # Test for Windows Mobile PPC but not old Macintosh PowerPC.
       !@user_agent.index(DEVICE_PPC).nil? && @user_agent.index(DEVICE_MAC_PPC).nil?
