@@ -1,5 +1,22 @@
 This is a quick port of Mobile ESP to Ruby.
 
+All detection methods are renamed
+detectIphone -> is_iphone?
+
+All constants are underscored and upercase
+e.g. DEVICE_IPHONE
+
+Public attributes and getter methods are attribute readers
+e.g. user_agent
+
+Getters are still there although very close to the detection methods in name
+getIsIphone -> is_iphone (without the ?)
+They may be removed and replaced by caching detection results
+
+I have kept sort of the same code-structure in the methods to make it easier to update.
+
+.
+
 See the following sites for more details on the project:
 http://www.mobileesp.com/
 http://code.google.com/p/mobileesp/
