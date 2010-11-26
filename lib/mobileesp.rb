@@ -27,7 +27,10 @@ module MobileESP
     # Optional: store values for quickly accessing same info multiple times.
     # Call InitDeviceScan() to initialize these values.
     attr_reader :user_agent, :http_accept, :is_iphone, :is_tier_iphone, :is_tier_rich_css, :is_tier_generic_mobile
-    
+    alias :get_is_iphone :is_iphone
+    alias :get_is_tier_iphone :is_tier_iphone
+    alias :get_is_tier_rich_css :is_tier_rich_css
+    alias :get_is_tier_generic_mobile :is_tier_generic_mobile
     
     # Initialize some initial smartphone string variables.
     ENGINE_WEB_KIT = "webkit"
@@ -141,71 +144,71 @@ module MobileESP
     
     # Initialize Key Stored Values.
     def init_device_scan
-      @is_iphone = is_iphone_or_ipod?
-      @is_tier_iphone = is_tier_iphone?
-      @is_tier_rich_css = is_tier_rich_css?
-      @is_tier_generic_mobile = is_tier_other_phones?
+      @is_iphone = detect_iphone_or_ipod
+      @is_tier_iphone = detect_tier_iphone
+      @is_tier_rich_css = detect_tier_rich_css
+      @is_tier_generic_mobile = detect_tier_other_phones
     end
     
     # Detects if the current device is an iPhone.
-    def is_iphone?
+    def detect_iphone
         # The iPad and iPod touch say they're an iPhone! So let's disambiguate.
-        !@user_agent.index(DEVICE_IPHONE).nil? && !is_ipad? && !is_ipod?
+        !@user_agent.index(DEVICE_IPHONE).nil? && !detect_ipad && !detect_ipod
     end
     
     # Detects if the current device is an iPod Touch.
-    def is_ipod?
+    def detect_ipod
         !@user_agent.index(DEVICE_IPOD).nil?
     end
     
     # Detects if the current device is an iPad tablet.
-    def is_ipad?
-      !@user_agent.index(DEVICE_IPAD).nil? && is_webkit?
+    def detect_ipad
+      !@user_agent.index(DEVICE_IPAD).nil? && detect_webkit
     end
     
     # Detects if the current device is an iPhone or iPod Touch.
-    def is_iphone_or_ipod?
+    def detect_iphone_or_ipod
         # We repeat the searches here because some iPods may report themselves as an iPhone, which would be okay.
         !@user_agent.index(DEVICE_IPHONE).nil? || !@user_agent.index(DEVICE_IPOD).nil?
     end
     
     # Detects if the current device is an Android OS-based device.
-    def is_android?
+    def detect_android
       !@user_agent.index(DEVICE_ANDROID).nil?
     end
     
     # Detects if the current device is an Android OS-based device and
     # the browser is based on WebKit.
-    def is_android_webkit?
-      is_android? && is_webkit?
+    def detect_android_webkit
+      detect_android && detect_webkit
     end
     
     # Detects if the current browser is based on WebKit.
-    def is_webkit?
+    def detect_webkit
       !@user_agent.index(ENGINE_WEB_KIT).nil?
     end
     
     # Detects if the current browser is the S60 Open Source Browser.
-    def is_s60_oss_browser?
-      is_webkit? && (!@user_agent.index(DEVICE_SYMBIAN).nil? || !@user_agent.index(DEVICE_S60).nil?)
+    def detect_s60_oss_browser
+      detect_webkit && (!@user_agent.index(DEVICE_SYMBIAN).nil? || !@user_agent.index(DEVICE_S60).nil?)
     end
     
     # Detects if the current device is any Symbian OS-based device,
     # including older S60, Series 70, Series 80, Series 90, and UIQ,
     # or other browsers running on these devices.
-    def is_symbian_os?
+    def detect_symbian_os
       !@user_agent.index(DEVICE_SYMBIAN).nil? || !@user_agent.index(DEVICE_S60).nil? || !@user_agent.index(DEVICE_S70).nil? || !@user_agent.index(DEVICE_S80).nil? || !@user_agent.index(DEVICE_S90).nil?
     end
     
     # Detects if the current browser is a Windows Phone 7 device.
-    def is_windows_phone7?
+    def detect_windows_phone7
       !@user_agent.index(DEVICE_WIN_PHONE7).nil?
     end
     
     # Detects if the current browser is a Windows Phone 7 device.
-    def is_windows_mobile?
+    def detect_windows_mobile
       # Exclude new Windows Phone 7.
-      return false if is_windows_phone7?
+      return false if detect_windows_phone7
       
       #Most devices use 'Windows CE', but some report 'iemobile'
       #  and some older ones report as 'PIE' for Pocket IE.
@@ -214,27 +217,27 @@ module MobileESP
         !@user_agent.index(DEVICE_IE_MOB).nil? || 
         !@user_agent.index(ENGINE_PIE).nil? || 
         (!@user_agent.index(MANU_HTC).nil? && !@user_agent.index(DEVICE_WINDOWS).nil?) || 
-        (is_wap_wml? && !@user_agent.index(DEVICE_WINDOWS).nil?) )
+        (detect_wap_wml && !@user_agent.index(DEVICE_WINDOWS).nil?) )
       
       # Test for Windows Mobile PPC but not old Macintosh PowerPC.
       !@user_agent.index(DEVICE_PPC).nil? && @user_agent.index(DEVICE_MAC_PPC).nil?
     end
     
     # Detects if the current browser is a BlackBerry of some sort.
-    def is_black_berry?
+    def detect_black_berry
       !@user_agent.index(DEVICE_BB).nil? || !@http_accept.index(VND_RIM).nil?
     end
     
     # Detects if the current browser is a BlackBerry device AND uses a
     #   WebKit-based browser. These are signatures for the new BlackBerry OS 6.
     #   Examples: Torch
-    def is_black_berry_web_kit?
+    def detect_black_berry_web_kit
       !@user_agent.index(DEVICE_BB).nil? && !@user_agent.index(ENGINE_WEB_KIT).nil?
     end
     
     # Detects if the current browser is a BlackBerry Touch
     # device, such as the Storm or Torch
-    def is_black_berry_touch?
+    def detect_black_berry_touch
       !@user_agent.index(DEVICE_BB_STORM).nil? || !@user_agent.index(DEVICE_BB_TORCH).nil?
     end
     
@@ -242,138 +245,138 @@ module MobileESP
     #   has a more capable recent browser.
     #   Examples, Storm, Bold, Tour, Curve2
     #   Excludes the new BlackBerry OS 6 browser!!
-    def is_black_berry_high?
+    def detect_black_berry_high
       # Disambiguate for BlackBerry OS 6 (WebKit) browser
-      return false if is_black_berry_web_kit?
+      return false if detect_black_berry_web_kit
       
-      is_black_berry? && (is_black_berry_touch? || !@user_agent.index(DEVICE_BB_BOLD).nil? || !@user_agent.index(DEVICE_BB_TOUR).nil? || !@user_agent.index(DEVICE_BB_CURVE).nil?)
+      detect_black_berry && (detect_black_berry_touch || !@user_agent.index(DEVICE_BB_BOLD).nil? || !@user_agent.index(DEVICE_BB_TOUR).nil? || !@user_agent.index(DEVICE_BB_CURVE).nil?)
     end
     
     # Detects if the current browser is a BlackBerry device AND
     #   has an older, less capable browser.
     #   Examples: Pearl, 8800, Curve1
-    def is_black_berry_low?
+    def detect_black_berry_low
       # Assume that if it's not in the High tier, then it's Low
-      is_black_berry? && !is_black_berry_high?
+      detect_black_berry && !detect_black_berry_high
     end
     
     # Detects if the current browser is on a PalmOS device.
-    def is_palm_os?
+    def detect_palm_os
       # Most devices nowadays report as 'Palm', but some older ones reported as Blazer or Xiino.
       # Make sure it's not WebOS first
-      !is_palm_web_os? && (!@user_agent.index(DEVICE_PALM).nil? || !@user_agent.index(ENGINE_BLAZER).nil? || !@user_agent.index(ENGINE_XIINO).nil?)
+      !detect_palm_web_os && (!@user_agent.index(DEVICE_PALM).nil? || !@user_agent.index(ENGINE_BLAZER).nil? || !@user_agent.index(ENGINE_XIINO).nil?)
     end
     
     # Detects if the current browser is on a Palm device
     #   running the new WebOS.
-    def is_palm_web_os?
+    def detect_palm_web_os
       !@user_agent.index(DEVICE_WEB_OS).nil?
     end
     
     # Detects if the current browser is a Garmin Nuvifone.
-    def is_garmin_nuvifone?
+    def detect_garmin_nuvifone
       !@user_agent.index(DEVICE_NUVIFONE).nil?
     end
     
     # Check to see whether the device is any device
     #   in the 'smartphone' category.
-    def is_smartphone?
-      ( is_iphone_or_ipod? || 
-        is_s60_oss_browser? || 
-        is_symbian_os? || 
-        is_android? || 
-        is_windows_mobile? || 
-        is_windows_phone7? || 
-        is_black_berry? || 
-        is_palm_web_os? || 
-        is_palm_os? || 
-        is_garmin_nuvifone? )
+    def detect_smartphone
+      ( detect_iphone_or_ipod || 
+        detect_s60_oss_browser || 
+        detect_symbian_os || 
+        detect_android || 
+        detect_windows_mobile || 
+        detect_windows_phone7 || 
+        detect_black_berry || 
+        detect_palm_web_os || 
+        detect_palm_os || 
+        detect_garmin_nuvifone )
     end
     
     # Detects whether the device is a Brew-powered device.
-    def is_brew_device?
+    def detect_brew_device
       !@user_agent.index(DEVICE_BREW).nil?
     end
     
     # Detects the Danger Hiptop device.
-    def is_danger_hiptop?
+    def detect_danger_hiptop
       !@user_agent.index(DEVICE_DANGER).nil? || !@user_agent.index(DEVICE_HIPTOP).nil?
     end
     
     # Detects Opera Mobile or Opera Mini.
-    def is_opera_mobile?
+    def detect_opera_mobile
       !@user_agent.index(ENGINE_OPERA).nil? && (!@user_agent.index(MINI).nil? || !@user_agent.index(MOBI).nil?)
     end
     
     # Detects whether the device supports WAP or WML.
-    def is_wap_wml?
+    def detect_wap_wml
       !@http_accept.index(VNDWAP).nil? || !@http_accept.index(WML).nil?
     end
     
     # Detects if the current device is an Amazon Kindle.
-    def is_kindle?
+    def detect_kindle
       !@user_agent.index(DEVICE_KINDLE).nil?
     end
     
     # The quick way to detect for a mobile device.
     #  Will probably detect most recent/current mid-tier Feature Phones
     #  as well as smartphone-class devices. Excludes Apple iPads.
-    def is_mobile_quick?
+    def detect_mobile_quick
       # Let's say no if it's an iPad, which contains 'mobile' in its user agent
-      return false if is_ipad?
+      return false if detect_ipad
       
-      ( is_smartphone? || 
-        is_wap_wml? || 
-        is_brew_device? || 
-        is_opera_mobile? || 
+      ( detect_smartphone || 
+        detect_wap_wml || 
+        detect_brew_device || 
+        detect_opera_mobile || 
         !@user_agent.index(ENGINE_NETFRONT).nil? || 
         !@user_agent.index(ENGINE_UP_BROWSER).nil? || 
         !@user_agent.index(ENGINE_OPEN_WEB).nil? || 
-        is_danger_hiptop? || 
-        is_midp_capable? || 
-        is_maemo_tablet? || 
-        is_archos? || 
-        (!@user_agent.index(DEVICE_PDA).nil? && @user_agent.index(DIS_UPDATE).nil?) || # no index found
+        detect_danger_hiptop || 
+        detect_midp_capable || 
+        detect_maemo_tablet || 
+        detect_archos || 
+        (!@user_agent.index(DEVICE_PDA).nil? && @user_agent.index(Ddetect_UPDATE).nil?) || # no index found
         !@user_agent.index(MOBILE).nil? )
     end
     
     # Detects if the current device is a Sony Playstation.
-    def is_sony_playstation?
+    def detect_sony_playstation
       !@user_agent.index(DEVICE_PLAYSTATION).nil?
     end
     
     # Detects if the current device is a Nintendo game device.
-    def is_nintendo?
+    def detect_nintendo
       !@user_agent.index(DEVICE_NINTENDO).nil? || !@user_agent.index(DEVICE_WII).nil? || !@user_agent.index(DEVICE_NINTENDO_DS).nil?
     end
     
     # Detects if the current device is a Microsoft Xbox.
-    def is_xbox?
+    def detect_xbox
       !@user_agent.index(DEVICE_XBOX).nil?
     end
     
     # Detects if the current device is an Internet-capable game console.
-    def is_game_console?
-      is_sony_playstation? || is_nintendo? || is_xbox?
+    def detect_game_console
+      detect_sony_playstation || detect_nintendo || detect_xbox
     end
     
     # Detects if the current device supports MIDP, a mobile Java technology.
-    def is_midp_capable?
+    def detect_midp_capable
       !@user_agent.index(DEVICE_MIDP).nil? || !@http_accept.index(DEVICE_MIDP).nil?
     end
     
     # Detects if the current device is on one of the Maemo-based Nokia Internet Tablets.
-    def is_maemo_tablet?
+    def detect_maemo_tablet
       !@user_agent.index(MAEMO).nil? || (!@user_agent.index(MAEMO_TABLET).nil? && !@user_agent.index(LINUX).nil?)
     end
     
     # Detects if the current device is an Archos media player/Internet tablet.
-    def is_archos?
+    def detect_archos
       !@user_agent.index(DEVICE_ARCHOS).nil?
     end
     
     # Detects if the current browser is a Sony Mylo device.
-    def is_sony_mylo?
+    def detect_sony_mylo
       !@user_agent.index(MANU_SONY).nil? && ( !@user_agent.index(QTEMBEDDED).nil? || !@user_agent.index(MYLOCOM2).nil? )
     end
     
@@ -383,8 +386,8 @@ module MobileESP
     #   Internet-enabled game consoles, etc.
     #   This ought to catch a lot of the more obscure and older devices, also --
     #   but no promises on thoroughness!
-    def is_mobile_long?
-      return true if is_mobile_quick? || is_game_console? || is_sony_mylo?
+    def detect_mobile_long
+      return true if detect_mobile_quick || detect_game_console || detect_sony_mylo
       
       # detect older phones from certain manufacturers and operators.
       ( !@user_agent.index(UPLINK).nil? || 
@@ -404,15 +407,15 @@ module MobileESP
     #   This method detects for devices which can
     #   display iPhone-optimized web content.
     #   Includes iPhone, iPod Touch, Android, Palm WebOS, etc.
-    def is_tier_iphone?
-      ( is_iphone_or_ipod? || 
-        is_android? || 
-        is_android_webkit? || 
-        is_windows_phone7? || 
-        is_black_berry_web_kit? || 
-        is_palm_web_os? || 
-        is_garmin_nuvifone? || 
-        is_maemo_tablet? )
+    def detect_tier_iphone
+      ( detect_iphone_or_ipod || 
+        detect_android || 
+        detect_android_webkit || 
+        detect_windows_phone7 || 
+        detect_black_berry_web_kit || 
+        detect_palm_web_os || 
+        detect_garmin_nuvifone || 
+        detect_maemo_tablet )
     end
     
     # The quick way to detect for a tier of devices.
@@ -420,22 +423,31 @@ module MobileESP
     #   of viewing CSS content optimized for the iPhone,
     #   but may not necessarily support JavaScript.
     #   Excludes all iPhone Tier devices.
-    def is_tier_rich_css?
-      ( is_mobile_quick? && 
-        (is_webkit? || 
-          is_s60_oss_browser? || 
-          is_black_berry_high? || 
-          is_windows_mobile? || 
+    def detect_tier_rich_css
+      ( detect_mobile_quick && 
+        (detect_webkit || 
+          detect_s60_oss_browser || 
+          detect_black_berry_high || 
+          detect_windows_mobile || 
           !@user_agent.index(ENGINE_TELECA_Q).nil? ))
     end
     
     #  The quick way to detect for a tier of devices.
     #   This method detects for all other types of phones,
     #   but excludes the iPhone and RichCSS Tier devices.
-    def is_tier_other_phones?
-      is_mobile_quick? && !is_tier_iphone? && !is_tier_rich_css?
+    def detect_tier_other_phones
+      detect_mobile_quick && !detect_tier_iphone && !detect_tier_rich_css
+    end
+    
+    
+    
+    # aliasing methods to more rubyfied names.
+    instance_methods.each do |method|
+      if method.to_s.index("detect_") == 0
+        new_method = (method.to_s.gsub("detect_","is_") + "?").to_sym
+        alias_method "#{new_method}", "#{method}"
+      end
     end
     
   end
-  
 end

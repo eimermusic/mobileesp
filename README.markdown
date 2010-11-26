@@ -2,7 +2,7 @@ This is a quick port of Mobile ESP to Ruby.
 -------------------------------------------
 
 All detection methods are renamed
-detectIphone -> is_iphone?
+detectIphone -> detect_iphone?
 
 All constants are underscored and uppercase
 e.g. DEVICE_IPHONE
@@ -10,7 +10,7 @@ e.g. DEVICE_IPHONE
 Public attributes and getter methods are attribute readers
 e.g. user_agent
 
-Getters are still there although very close to the detection methods in name
+Getters are still there as attribute readers
 getIsIphone -> is_iphone (without the ?)
 They may be removed and replaced by caching detection results
 
@@ -22,9 +22,9 @@ Usage example in rails
     ua = MobileESP::UserAgentInfo.new(request.user_agent, request.accept)
     if ua.is_tier_iphone?
       # You get hignend mobile layout
-    elsif ua.is_mobile_quick?
+    elsif ua.detect_mobile_quick?
       # You get lowend mobile layout
-    elsif ua.is_ipad?
+    elsif ua.detect_ipad?
       # You probably still get the computer layout
     end
 
@@ -39,46 +39,45 @@ Quick list of detection methods
     ua.is_tier_rich_css
     ua.is_tier_generic_mobile
     
-    # All the rubyfied detection methods
-    # (the source is connented, you know?)
-    ua.is_iphone?
-    ua.is_ipod?
-    ua.is_ipad?
-    ua.is_iphone_or_ipod?
-    ua.is_android?
-    ua.is_android_webkit?
-    ua.is_webkit?
-    ua.is_s60_oss_browser?
-    ua.is_symbian_os?
-    ua.is_windows_phone7?
-    ua.is_windows_mobile?
-    ua.is_black_berry?
-    ua.is_black_berry_web_kit?
-    ua.is_black_berry_touch?
-    ua.is_black_berry_high?
-    ua.is_black_berry_low?
-    ua.is_palm_os?
-    ua.is_palm_web_os?
-    ua.is_garmin_nuvifone?
-    ua.is_smartphone?
-    ua.is_brew_device?
-    ua.is_danger_hiptop?
-    ua.is_opera_mobile?
-    ua.is_wap_wml?
-    ua.is_kindle?
-    ua.is_mobile_quick?
-    ua.is_sony_playstation?
-    ua.is_nintendo?
-    ua.is_xbox?
-    ua.is_game_console?
-    ua.is_midp_capable?
-    ua.is_maemo_tablet?
-    ua.is_archos?
-    ua.is_sony_mylo?
-    ua.is_mobile_long?
-    ua.is_tier_iphone?
-    ua.is_tier_rich_css?
-    ua.is_tier_other_phones?
+    # All detection methods
+    ua.detect_iphone?
+    ua.detect_ipod?
+    ua.detect_ipad?
+    ua.detect_iphone_or_ipod?
+    ua.detect_android?
+    ua.detect_android_webkit?
+    ua.detect_webkit?
+    ua.detect_s60_oss_browser?
+    ua.detect_symbian_os?
+    ua.detect_windows_phone7?
+    ua.detect_windows_mobile?
+    ua.detect_black_berry?
+    ua.detect_black_berry_web_kit?
+    ua.detect_black_berry_touch?
+    ua.detect_black_berry_high?
+    ua.detect_black_berry_low?
+    ua.detect_palm_os?
+    ua.detect_palm_web_os?
+    ua.detect_garmin_nuvifone?
+    ua.detect_smartphone?
+    ua.detect_brew_device?
+    ua.detect_danger_hiptop?
+    ua.detect_opera_mobile?
+    ua.detect_wap_wml?
+    ua.detect_kindle?
+    ua.detect_mobile_quick?
+    ua.detect_sony_playstation?
+    ua.detect_nintendo?
+    ua.detect_xbox?
+    ua.detect_game_console?
+    ua.detect_midp_capable?
+    ua.detect_maemo_tablet?
+    ua.detect_archos?
+    ua.detect_sony_mylo?
+    ua.detect_mobile_long?
+    ua.detect_tier_iphone?
+    ua.detect_tier_rich_css?
+    ua.detect_tier_other_phones?
 
 
 

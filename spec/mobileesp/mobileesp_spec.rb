@@ -2,6 +2,26 @@ require 'spec_helper'
 
 describe "MobileESP::UserAgentInfo" do
   
+  it "correctly aliases attribute readers" do
+    esp = MobileESP::UserAgentInfo.new(
+    "Mozilla/5.0 (iPod; U; CPU iPhone OS 4_0_2 like Mac OS X; en-us) AppleWebKit/532.9 (KHTML, like Gecko) Version/4.0.5 Mobile/8A400 Safari/6531.22.7",
+    "*/*"
+    )
+    esp.get_is_iphone.should == esp.is_iphone
+    esp.get_is_tier_iphone.should ==  esp.is_tier_iphone
+    esp.get_is_tier_rich_css.should ==  esp.is_tier_rich_css
+    esp.get_is_tier_generic_mobile.should ==  esp.is_tier_generic_mobile
+  end
+  
+  it "correctly aliases methods" do
+    esp = MobileESP::UserAgentInfo.new(
+    "Mozilla/5.0 (iPod; U; CPU iPhone OS 4_0_2 like Mac OS X; en-us) AppleWebKit/532.9 (KHTML, like Gecko) Version/4.0.5 Mobile/8A400 Safari/6531.22.7",
+    "*/*"
+    )
+    esp.detect_iphone.should == esp.is_iphone?
+  end
+  
+  
   it "correctly detects an ipod touch" do
     esp = MobileESP::UserAgentInfo.new(
     "Mozilla/5.0 (iPod; U; CPU iPhone OS 4_0_2 like Mac OS X; en-us) AppleWebKit/532.9 (KHTML, like Gecko) Version/4.0.5 Mobile/8A400 Safari/6531.22.7",
