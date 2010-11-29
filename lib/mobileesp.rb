@@ -5,7 +5,7 @@
 #   Source Files: http://code.google.com/p/mobileesp/
 #
 #   Versions of this code are available for:
-#      PHP, JavaScript, Java, and ASP.NET (C#)
+#      PHP, JavaScript, Java, ASP.NET (C#), and Ruby
 #
 #   This port was done by Martin Westin based on the Java source.
 #   All methods and attributes have been rubyfied and are not 
@@ -34,12 +34,14 @@ module MobileESP
     
     # Initialize some initial smartphone string variables.
     ENGINE_WEB_KIT = "webkit"
-    DEVICE_ANDROID = "android"
 
     DEVICE_IPHONE = "iphone"
     DEVICE_IPOD = "ipod"
     DEVICE_IPAD = "ipad"
     DEVICE_MAC_PPC = "macintosh" #Used for disambiguation
+
+    DEVICE_ANDROID = "android"
+    DEVICE_GOOGLE_TV = "googletv"
 
     DEVICE_SYMBIAN = "symbian"
     DEVICE_S60 = "series60"
@@ -181,6 +183,11 @@ module MobileESP
     # the browser is based on WebKit.
     def detect_android_webkit
       detect_android && detect_webkit
+    end
+    
+    # Detects if the current device is a GoogleTV.
+    def detect_google_tv
+      !@user_agent.index(DEVICE_GOOGLE_TV).nil?
     end
     
     # Detects if the current browser is based on WebKit.

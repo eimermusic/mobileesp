@@ -81,6 +81,14 @@ describe "MobileESP::UserAgentInfo" do
     esp.is_android?.should         be_true
   end
   
+  it "correctly detects that a Google Nexus is not a Google TV" do
+    esp = MobileESP::UserAgentInfo.new(
+    "Mozilla/5.0 (Linux; U; Android 2.1; en-us; Nexus One Build/ERD62) AppleWebKit/530.17 (KHTML, like Gecko) Version/4.0 Mobile Safari/530.17",
+    ""
+    )
+    esp.is_android?.should         be_true
+    esp.is_google_tv?.should       be_false
+  end
   
   # more to be added here... lots more
   
