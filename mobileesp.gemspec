@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
   s.name = "mobileesp"
-  s.version = "1.120"
+  s.version = "1.130"
   s.date = Time.now
   s.summary = "Ruby port and tweak of Mobile ESP: http://www.mobileesp.com/"
   s.require_paths = ["lib"]
